@@ -11,17 +11,13 @@ class PolyTreeNode
 
   def parent=(elder=nil)
     return if elder == self
-    # if parent isn't nil
-    # remove "self" from parent's children array
-    # (for reassignment)
+
     if !@parent.nil? && !elder.nil?
       @parent.remove_child(self)
     end
     
-    # setting our parent equal to elder
     @parent = elder        
     
-    # adding ourselves to elder's children array
     @parent.children << self unless @parent.nil? || @parent.children.include?(self) 
   end
   
@@ -36,24 +32,23 @@ class PolyTreeNode
   end
   
   def add_child(kid)
-    # debugger
+
     @children << kid unless @children.include?(kid)
 
     kid.parent = self 
   end
   
-  # def dfs(target_value)
-  #   return self if target_value == value
-  #   # return self if children.empty?
-  #   # debugger
-  #   children.each do |child|
-  #     child.dfs(target_value)
-  #   end
-  # 
-  # end
-  # 
+  def dfs(target_value)
+    return self if target_value == value
+    
+    children.each do |child|
+      good_kid = child.dfs(target_value)
+      return good_kid if good_kid
+    end
+    nil
+  end
+
   def bfs(target_value)
-    # return self if queue.empty?
     queue = [self]
     until queue.empty?
       first = queue.shift
@@ -65,6 +60,3 @@ class PolyTreeNode
     nil
   end
 end
-
-
-
